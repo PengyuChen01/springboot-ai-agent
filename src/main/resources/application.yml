@@ -1,6 +1,11 @@
 spring:
   application:
     name: pengyu-ai-agent
+  profiles:
+    active: local
+
+
+
 server:
   port: 8123
   servlet:
