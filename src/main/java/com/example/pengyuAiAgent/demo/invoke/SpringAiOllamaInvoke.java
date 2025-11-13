@@ -8,16 +8,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * spring ai 框架调用 AI 大模型(阿里）
+ * spring ai 框架调用 AI 大模型(ollama）
  */
 @Component
-public class SpringAiInvoke implements CommandLineRunner {
+public class SpringAiOllamaInvoke implements CommandLineRunner {
     @Resource
-    private ChatModel dashscopeChatModel;
+    private ChatModel ollamaChatModel;
 
     @Override
     public void run(String... args) throws Exception {
-        AssistantMessage assistantMessage = dashscopeChatModel.call(new Prompt("你好，我是pengyu"))
+        AssistantMessage assistantMessage = ollamaChatModel.call(new Prompt("你好，我是pengyu"))
                 .getResult()
                 .getOutput();
         System.out.println(assistantMessage.getText());

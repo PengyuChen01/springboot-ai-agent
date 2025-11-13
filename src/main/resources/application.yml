@@ -3,7 +3,12 @@ spring:
     name: pengyu-ai-agent
   profiles:
     active: local
-
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3
 
 
 server:

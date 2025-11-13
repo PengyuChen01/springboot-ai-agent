@@ -2,15 +2,21 @@ package com.example.pengyuAiAgent.demo.invoke;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class HttpAiInvoke {
     
     private static final String API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
+    
+    @Value("${spring.ai.dashscope.api-key}")
+    private String apiKey;
     
     /**
      * 调用阿里云通义千问API
@@ -58,29 +64,32 @@ public class HttpAiInvoke {
     }
     
     /**
-     * 从 .env 文件读取 API_KEY 进行调用
+     * 从 application-local.yml 配置读取 API_KEY 进行调用
      */
-    public static String invoke() {
-        String apiKey = EnvUtil.getDashScopeApiKey();
+    public String invoke() {
         if (apiKey == null || apiKey.isEmpty()) {
-            throw new RuntimeException("未找到 DASHSCOPE_API_KEY，请检查 .env 文件配置");
+            throw new RuntimeException("未找到 spring.ai.dashscope.api-key，请检查 application-local.yml 配置");
         }
         return invoke(apiKey);
     }
     
     /**
-     * 使用TestApiKey中的API_KEY进行调用（备用方法）
-     */
-    public static String invokeWithTestKey() {
-        return invoke(TestApiKey.API_KEY);
-    }
-    
-    /**
-     * 测试方法
+     * 测试方法（需要在 Spring 上下文中运行）
      */
     public static void main(String[] args) {
-        String response = invoke();
-        System.out.println("响应结果：");
-        System.out.println(response);
+        // 使用 SpringApplication 来启动，以便正确加载配置文件
+        org.springframework.boot.SpringApplication app = 
+            new org.springframework.boot.SpringApplication(com.example.pengyuAiAgent.AiGentApplication.class);
+        app.setWebApplicationType(org.springframework.boot.WebApplicationType.NONE);
+        org.springframework.context.ConfigurableApplicationContext context = app.run(args);
+        
+        try {
+            HttpAiInvoke httpAiInvoke = context.getBean(HttpAiInvoke.class);
+            String response = httpAiInvoke.invoke();
+            System.out.println("响应结果：");
+            System.out.println(response);
+        } finally {
+            context.close();
+        }
     }
 }
