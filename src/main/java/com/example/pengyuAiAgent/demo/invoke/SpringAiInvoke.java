@@ -1,7 +1,6 @@
 package com.example.pengyuAiAgent.demo.invoke;
 
 import jakarta.annotation.Resource;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringAiInvoke implements CommandLineRunner {
 
-    QuestionAnswerAdvisor advisor;
     @Resource
     private ChatModel dashscopeChatModel;
 
