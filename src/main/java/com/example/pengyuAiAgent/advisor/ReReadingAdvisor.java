@@ -3,6 +3,7 @@ package com.example.pengyuAiAgent.advisor;
 import org.springframework.ai.chat.client.advisor.api.*;
 import reactor.core.publisher.Flux;
 
+
 public class ReReadingAdvisor implements BaseAdvisor {
 
 	private static final String DEFAULT_RE2_ADVISE_TEMPLATE = """

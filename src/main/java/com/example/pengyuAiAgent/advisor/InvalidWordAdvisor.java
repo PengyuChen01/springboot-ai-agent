@@ -1,5 +1,5 @@
 package com.example.pengyuAiAgent.advisor;
 
-public class InvalidWordAdvisor {
+public class InvalidWordAdvisor implements Advisor {
 
 }
