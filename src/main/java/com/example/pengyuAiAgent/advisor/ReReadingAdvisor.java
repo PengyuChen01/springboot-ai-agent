@@ -1,56 +1,56 @@
 package com.example.pengyuAiAgent.advisor;
 
-import org.springframework.ai.chat.client.advisor.api.*;
+import org.springframework.ai.chat.client.ChatClientRequest;
+import org.springframework.ai.chat.client.ChatClientResponse;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
+import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
+import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
+import org.springframework.ai.chat.prompt.Prompt;
 import reactor.core.publisher.Flux;
 
+/**
+ * 自定义 Re2 Advisor
+ * 可提高大型语言模型的推理能力
+ */
+public class ReReadingAdvisor implements CallAdvisor, StreamAdvisor {
 
-public class ReReadingAdvisor implements BaseAdvisor {
-
-	private static final String DEFAULT_RE2_ADVISE_TEMPLATE = """
-			{re2_input_query}
-			Read the question again: {re2_input_query}
-			""";
-
-	private final String re2AdviseTemplate;
-
-	private int order = 0;
-
-	public ReReadingAdvisor() {
-		this(DEFAULT_RE2_ADVISE_TEMPLATE);
+	/**
+	 * 执行请求前，改写 Prompt
+	 *
+	 * @param chatClientRequest
+	 * @return
+	 */
+	private ChatClientRequest before(ChatClientRequest chatClientRequest) {
+		String userText = chatClientRequest.prompt().getUserMessage().getText();
+		// 添加上下文参数
+		chatClientRequest.context().put("re2_input_query", userText);
+		// 修改用户提示词
+		String newUserText = """
+                %s
+                Read the question again: %s
+                """.formatted(userText, userText);
+		Prompt newPrompt = chatClientRequest.prompt().augmentUserMessage(newUserText);
+		return new ChatClientRequest(newPrompt, chatClientRequest.context());
 	}
 
-	public ReReadingAdvisor(String re2AdviseTemplate) {
-		this.re2AdviseTemplate = re2AdviseTemplate;
-	}
 	@Override
-	public AdvisedResponse aroundCall(AdvisedRequest advisedRequest, CallAroundAdvisorChain chain){
-		return chain.nextAroundCall(this.before(advisedRequest));
+	public ChatClientResponse adviseCall(ChatClientRequest chatClientRequest, CallAdvisorChain chain) {
+		return chain.nextCall(this.before(chatClientRequest));
 	}
-	@Override
-	public Flux<AdvisedResponse> aroundStream(AdvisedRequest advisedRequest, StreamAroundAdvisorChain chain){
-		return chain.nextAroundStream(this.before(advisedRequest));
-	}
-	@Override
-	public AdvisedRequest before(AdvisedRequest request){
-		String originalUserText = request.userText();
-		String augmentedUserText = this.re2AdviseTemplate
-				.replace("{re2_input_query}", originalUserText);
 
-		return AdvisedRequest.from(request)
-				.userText(augmentedUserText)
-				.build();
-	}
 	@Override
-	public AdvisedResponse after(AdvisedResponse response){
-		return response;
+	public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest, StreamAdvisorChain chain) {
+		return chain.nextStream(this.before(chatClientRequest));
 	}
+
 	@Override
 	public int getOrder() {
-		return this.order;
+		return 0;
 	}
 
-	public ReReadingAdvisor withOrder(int order) {
-		this.order = order;
-		return this;
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
 	}
 }
