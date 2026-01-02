@@ -6,6 +6,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
@@ -13,6 +14,7 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -27,6 +29,8 @@ public class LoveApp {
             "围绕单身、恋爱、已婚三种状态提问：单身状态询问社交圈拓展及追求心仪对象的困扰；" +
             "恋爱状态询问沟通、习惯差异引发的矛盾；已婚状态询问家庭责任与亲属关系处理的问题。" +
             "引导用户详述事情经过、对方反应及自身想法，以便给出专属解决方案。";
+    @Autowired
+    private Advisor loveAppRagCloudAdvisor;
 
     /**
      * 初始化 ChatClient
@@ -116,7 +120,11 @@ public class LoveApp {
     @Resource
     private VectorStore loveVectorStore;
 
+    @Resource
+    private Advisor LoveAppRagCloudAdvisorConfig;
 
+    @Resource
+    private VectorStore pgVectorVectorStore;
     /**
      *  和rag 知识库进行对话
      * @param message
@@ -130,7 +138,12 @@ public class LoveApp {
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, chatId))
                 //开启日志，便于观察效果
                 .advisors(new MyLoggerAdvisor())
-                .advisors(new QuestionAnswerAdvisor(loveVectorStore))
+                // 应用 RAG 知识库问答
+//                .advisors(new QuestionAnswerAdvisor(loveVectorStore))
+                // 应用 RAG 检索增强服务 (基于云知识库服务）
+//                .advisors(loveAppRagCloudAdvisor)
+                // 应用 RAG 检索增强服务（基于pgvector 向量存储）
+                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
@@ -138,3 +151,4 @@ public class LoveApp {
         return content;
     }
 }
+

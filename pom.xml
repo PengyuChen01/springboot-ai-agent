@@ -68,6 +68,7 @@
             </exclusions>
         </dependency>
         <!-- Spring AI Alibaba -->
+
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
@@ -82,26 +83,27 @@
             <artifactId>spring-ai-markdown-document-reader</artifactId>
         </dependency>
         <!-- 手动整合 PGVector 向量存储 -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-pgvector-store</artifactId>-->
-<!--        </dependency>-->
-        <!-- 自动整合 PGVector 向量存储 -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.ai</groupId>-->
-        <!--            <artifactId>spring-ai-starter-vector-store-pgvector</artifactId>-->
-        <!--            <version>1.0.0-M7</version>-->
-        <!--        </dependency>-->
-        <!-- Spring AI MCP Client -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-pgvector-store</artifactId>
+<!--            <version>1.0.0-M6</version>-->
+        </dependency>
+<!--         自动整合 PGVector 向量存储-->
+<!--                <dependency>-->
+<!--                    <groupId>org.springframework.ai</groupId>-->
+<!--                    <artifactId>spring-ai-starter-vector-store-pgvector</artifactId>-->
+<!--                    <version>1.0.0-M7</version>-->
+<!--                </dependency>-->
+<!--         Spring AI MCP Client-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client</artifactId>
@@ -182,6 +184,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
