@@ -12,7 +12,7 @@ import java.util.List;
 class MultiQueryExpanderDemoTest {
 
     @Resource
-    private com.yupi.yuaiagent.demo.rag.MultiQueryExpanderDemo multiQueryExpanderDemo;
+    private MultiQueryExpanderDemo multiQueryExpanderDemo;
 
     @Test
     void expand() {
