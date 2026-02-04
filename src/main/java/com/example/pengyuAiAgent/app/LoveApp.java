@@ -4,6 +4,7 @@ package com.example.pengyuAiAgent.app;
 import com.example.pengyuAiAgent.advisor.MyLoggerAdvisor;
 import com.example.pengyuAiAgent.rag.LoveAppRagCustomAdvisorFactory;
 import com.example.pengyuAiAgent.rag.QueryRewriter;
+import com.example.pengyuAiAgent.tools.WebSearchTool;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -37,9 +38,10 @@ public class LoveApp {
     /**
      * 初始化 ChatClient
      *
-     * @param dashscopeChatModel
+     * @param dashscopeChatModel AI模型
+     * @param webSearchTool 网络搜索工具
      */
-    public LoveApp(ChatModel dashscopeChatModel) {
+    public LoveApp(ChatModel dashscopeChatModel, WebSearchTool webSearchTool) {
 //        // 初始化基于文件的对话记忆
 //        String fileDir = System.getProperty("user.dir") + "/tmp/chat-memory";
 //        ChatMemory chatMemory = new FileBasedChatMemory(fileDir);
@@ -57,6 +59,7 @@ public class LoveApp {
 //                        // 自定义推理增强 Advisor，可按需开启
 //                       ,new ReReadingAdvisor()
                 )
+                .defaultTools(webSearchTool)
                 .build();
     }
 
