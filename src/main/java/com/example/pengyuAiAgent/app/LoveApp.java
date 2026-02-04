@@ -32,18 +32,16 @@ public class LoveApp {
             "引导用户详述事情经过、对方反应及自身想法，以便给出专属解决方案。";
     @Autowired
     private VectorStore loveAppVectorStore;
-    
-    @Autowired
-    private WebSearchTool webSearchTool;
 //    @Autowired
 //    private Advisor loveAppRagCloudAdvisor;
 
     /**
      * 初始化 ChatClient
      *
-     * @param dashscopeChatModel
+     * @param dashscopeChatModel AI模型
+     * @param webSearchTool 网络搜索工具
      */
-    public LoveApp(ChatModel dashscopeChatModel) {
+    public LoveApp(ChatModel dashscopeChatModel, WebSearchTool webSearchTool) {
 //        // 初始化基于文件的对话记忆
 //        String fileDir = System.getProperty("user.dir") + "/tmp/chat-memory";
 //        ChatMemory chatMemory = new FileBasedChatMemory(fileDir);
