@@ -4,6 +4,7 @@ package com.example.pengyuAiAgent.app;
 import com.example.pengyuAiAgent.advisor.MyLoggerAdvisor;
 import com.example.pengyuAiAgent.rag.LoveAppRagCustomAdvisorFactory;
 import com.example.pengyuAiAgent.rag.QueryRewriter;
+import com.example.pengyuAiAgent.tools.WebSearchTool;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -31,6 +32,9 @@ public class LoveApp {
             "引导用户详述事情经过、对方反应及自身想法，以便给出专属解决方案。";
     @Autowired
     private VectorStore loveAppVectorStore;
+    
+    @Autowired
+    private WebSearchTool webSearchTool;
 //    @Autowired
 //    private Advisor loveAppRagCloudAdvisor;
 
@@ -57,6 +61,7 @@ public class LoveApp {
 //                        // 自定义推理增强 Advisor，可按需开启
 //                       ,new ReReadingAdvisor()
                 )
+                .defaultTools(webSearchTool)
                 .build();
     }
 
