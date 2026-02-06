@@ -46,4 +46,77 @@ class LoveAppTest {
         String answer = loveApp.doChatWithRag(message, chatId);
         Assertions.assertNotNull(answer);
     }
+    /**
+     * 测试AI调用WebSearchTool
+     * message故意引导AI去搜索
+     */
+    @Test
+    void testChatWithWebSearch() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我搜索一下2024年最新的恋爱沟通技巧有哪些";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("WebSearch answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用FileOperationTool（写文件）
+     */
+    @Test
+    void testChatWithFileWrite() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我把以下内容写到一个叫love_tips.txt的文件里：恋爱三大原则：尊重、沟通、信任";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("FileWrite answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用FileOperationTool（读文件）
+     */
+    @Test
+    void testChatWithFileRead() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我读取love_tips.txt文件的内容";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("FileRead answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用WebScrapingTool
+     */
+    @Test
+    void testChatWithWebScraping() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我抓取这个网页的内容：https://www.zhihu.com/question/275359100";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("WebScraping answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用ResourceDownloadTool
+     */
+    @Test
+    void testChatWithResourceDownload() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我下载这张图片并保存为test.png：https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("ResourceDownload answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用多个Tool的组合场景
+     * AI可能先搜索，再写文件
+     */
+    @Test
+    void testChatWithMultipleTools() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "帮我搜索一下恋爱中如何处理冷战，然后把搜索到的建议写到一个叫cold_war_tips.txt的文件里";
+        String answer = loveApp.doChat(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("MultipleTools answer: {}", answer);
+    }
 }
