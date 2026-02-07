@@ -9,6 +9,10 @@ spring:
       chat:
         options:
           model: llama3
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:mcp-service.json
 
     vectorstore:
       pgvector:
