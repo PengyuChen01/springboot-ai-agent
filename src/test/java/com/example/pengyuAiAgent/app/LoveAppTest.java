@@ -119,4 +119,14 @@ class LoveAppTest {
         Assertions.assertNotNull(answer);
         log.info("MultipleTools answer: {}", answer);
     }
+
+    @Test
+    void testChatWithMcp() {
+        String chatId = UUID.randomUUID().toString();
+        // 地图/地理相关的问题，触发AI调用高德MCP工具
+        String message = "帮我查一下从北京天安门到上海外滩的驾车路线";
+        String answer = loveApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("MCP answer: {}", answer);
+    }
 }
