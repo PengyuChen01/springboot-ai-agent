@@ -19,14 +19,14 @@ class LoveAppTest {
         String chatId = UUID.randomUUID().toString();
         // first round
         String message = "您好，我是pengyu";
-        String answer = loveApp.doChat(chatId, message);
+        String answer = loveApp.doChat(message, chatId);
         // second round
         message = "您好，我想让xxx 更爱我";
-        answer = loveApp.doChat(chatId, message);
+        answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
         // third round
         message = "我的另一半叫什么？刚刚跟你说过 帮我回忆一下";
-        answer = loveApp.doChat(chatId, message);
+        answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
     }
 
@@ -128,5 +128,18 @@ class LoveAppTest {
         String answer = loveApp.doChatWithMcp(message, chatId);
         Assertions.assertNotNull(answer);
         log.info("MCP answer: {}", answer);
+    }
+
+    /**
+     * 测试AI调用Time MCP工具
+     * 触发AI调用时间/时区相关的MCP工具
+     */
+    @Test
+    void testChatWithTimeMcp() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "现在纽约是几点？和北京时间相差多少小时？";
+        String answer = loveApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(answer);
+        log.info("Time MCP answer: {}", answer);
     }
 }
